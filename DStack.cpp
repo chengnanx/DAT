@@ -2,34 +2,35 @@
 #include <assert.h>
 using namespace std;
 
-typedef int DStackElement;
-
+template <typename StackElement>
 class DStack
 {
     public:
         DStack(int numElements = 128);
-        DStack(const DStack & original);
+        DStack(const DStack<StackElement> & original);
         ~DStack();
-        const DStack &operator=(const DStack &rightHandSide);
+        const DStack &operator=(const DStack<StackElement> &rightHandSide);
         bool empty() const;
-        void push(const DStackElement &value);
+        void push(const StackElement &value);
         void display(ostream &out) const;
-        DStackElement top() const;
+        StackElement top() const;
         void pop();
 
     private:
         int myCapacity,
             myTop;
-        DStackElement *myArray;
+        StackElement *myArray;
 };
 
-DStack::~DStack()
+template <typename StackElement>
+DStack<StackElement>::~DStack()
 {
     delete[] myArray;
 
 }
 
-DStack::DStack(int numElements)
+template <typename StackElement>
+DStack<StackElement>::DStack(int numElements)
 {
     assert (numElements > 0);
     myCapacity =  numElements;
@@ -43,7 +44,8 @@ DStack::DStack(int numElements)
     }
 }
 
-DStack::DStack(const DStack & original)
+template <typename StackElement>
+DStack<StackElement>::DStack(const DStack<StackElement> & original)
 :myCapacity(original.myCapacity), myTop(original.myTop)
 {
     myArray = new(nothrow) DStackElement[myCapacity];
@@ -56,8 +58,8 @@ DStack::DStack(const DStack & original)
         exit(1);
     }    
  }
-
- const DStack &DStack::operator=(const DStack &rightHandSide)
+template <typename StackElement>
+const DStack<StackElement> &DStack<StackElement>::operator=(const DStack<StackElement> &rightHandSide)
  {
      if (this != & rightHandSide)
      {
@@ -78,12 +80,14 @@ DStack::DStack(const DStack & original)
      }
  }
 
-bool DStack::empty() const
+template <typename StackElement>
+bool DStack<StackElement>::empty() const
 {
     return (myTop == -1);
 }
 
-void DStack::push(const DStackElement & value)
+template <typename StackElement>
+void DStack<StackElement>::push(const StackElement & value)
 {
     if (myTop < myCapacity - 1)
     {
@@ -97,7 +101,8 @@ void DStack::push(const DStackElement & value)
     }
 }
 
- void DStack::display(ostream &out) const
+template <typename StackElement>
+ void DStack<StackElement>::display(ostream &out) const
 {
     for (int i = myTop; i >= 0; i--)
     {
@@ -105,7 +110,8 @@ void DStack::push(const DStackElement & value)
     }
 }
 
-DStackElement DStack::top() const
+template <typename StackElement>
+StackElement DStack<StackElement>::top() const
 {   
     if (!empty())
     {
@@ -119,7 +125,8 @@ DStackElement DStack::top() const
     }
 }
 
-void DStack::pop()
+template <typename StackElement>
+void DStack<StackElement>::pop()
 {
     if (empty())
     {
@@ -137,7 +144,7 @@ int main()
     cout << "Enter stack capacity: ";
     cin >> cap;
     // DStack p(cap);
-    DStack s(cap);
+    DStack<int> s(cap);
 
    
     cout << "Stack created. Empty? " << boolalpha << s.empty() << endl;
